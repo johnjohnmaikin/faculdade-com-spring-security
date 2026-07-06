@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login do Sistema</title>
+    <link rel="stylesheet" th:href="@{/loading.css}">
+</head>
+<body>
+
+<div class="login-container">
+    <!-- Tela de Loading interna ao container -->
+    <div id="loader" class="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Autenticando...</div>
+    </div>
+
+    <h2>Área de Login</h2>
+
+    <!-- Exibe erro se o controller mandar -->
+    <p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
+
+    <!-- O action bate direto no @PostMapping do nosso Controller -->
+    <form id="loginForm" th:action="@{/logar}" method="POST">
+        <label>Usuário:</label> <br>
+        <input type="text" name="usuario" required> <br><br>
+
+        <label>Senha:</label> <br>
+        <input type="password" name="senha" required> <br><br>
+
+        <button type="submit">Entrar</button>
+    </form>
+    <br>
+    <a href="/cadastro">Cadastrar usuário</a>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        // 1. Impede o formulário de ser enviado imediatamente
+        event.preventDefault();
+
+        // 2. Mostra a tela de loading
+        document.getElementById('loader').style.display = 'flex';
+
+        // 3. Guarda a referência do formulário
+        const form = this;
+
+        // 4. Força um atraso de 2.5 segundos (2500 milissegundos) antes de enviar
+        setTimeout(function() {
+            form.submit(); // Envia o formulário de verdade para o @PostMapping do Spring
+        }, 2500);
+    });
+</script>
+</body>
+</html>
