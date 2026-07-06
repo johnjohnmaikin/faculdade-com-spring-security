@@ -1,10 +1,10 @@
-.div-pai-left-right {
+.div-geral {
     display: flex;
     width: 100%;
     justify-content:center;
 }
 
-.div-left {
+.div-pai-form {
     display: flex;
     flex-direction: column;
     margin-top:300px;
@@ -33,15 +33,22 @@
     height: 700px;
     object-fit: cover;
 }
+.div-msg{
+        position:absolute;
+        margin-top:-20px;
+    }
+
+/* =============================================================================================================================*/
+/* ==================================================TELA PARA CELULAR==========================================================*/
 
 @media (max-width: 768px) {
 
-    .div-pai-left-right {
+    .div-geral{
         flex-direction: column;
     }
 
-    .div-left,
-    .div-right {
+    .div-pai-form {
+        margin:0;
         width: 100%;
         display: flex;
     }
@@ -55,4 +62,5 @@
     .inputs_form {
         width: 100%;
     }
-}
+
+    }

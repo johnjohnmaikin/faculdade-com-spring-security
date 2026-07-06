@@ -15,12 +15,15 @@ import java.time.LocalDate;
 
         @Column(nullable = false, unique = true)
         private Long id;
+
         @Column(nullable = false, unique = true)
         private String username;
+
         @Column(nullable = false, length = 100)
         private String senha;
 
         private LocalDate data_nascimento;
+
         @Column(nullable = false, unique = true)
         private String cpf;
 

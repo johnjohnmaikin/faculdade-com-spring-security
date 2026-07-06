@@ -26,14 +26,14 @@ public class LoginController {
     }
 
     @PostMapping("/logar")
-    public String autenticar(@RequestParam String usuario,
-                             @RequestParam String senha,
-                             HttpSession session, RedirectAttributes redirectAttributes){
-        if(usuarioService.autenticar(usuario, senha)){
-           session.setAttribute("usuarioLogado", usuario);
-           return "redirect:/index";
+    public String autenticar(@RequestParam String usuario, @RequestParam String senha, HttpSession session, RedirectAttributes redirectAttributes){
+        try {
+            if (usuarioService.autenticar(usuario, senha)) {session.setAttribute("usuarioLogado", usuario);
+                return "redirect:/index";
+            }
+        }catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
         }
-        redirectAttributes.addFlashAttribute("erro", "Usuário ou senha invalidos!");
         return "redirect:/login";
     }
 
@@ -55,11 +55,16 @@ public class LoginController {
         return "cadastro";
     }
     @PostMapping("/cadastrar")
-    public String cadastrar(@RequestParam String nome, String senha, LocalDate data_nascimento, String cpf, String endereco, RedirectAttributes redirectAttributes){
+    public String cadastrar(@RequestParam String nome,
+                             String senha,
+                             LocalDate data_nascimento,
+                             String cpf,
+                             String endereco,
+                            RedirectAttributes redirectAttributes){
         try{
             usuarioService.Cadastrar(nome,senha,data_nascimento,cpf,endereco);
             redirectAttributes.addFlashAttribute("sucesso","usuário cadastrado com sucesso!");
-            return "cadastro";
+            return "redirect:/cadastro";
         }catch (IllegalArgumentException e){
             redirectAttributes.addFlashAttribute("erro",e.getMessage());
             return "redirect:/cadastro";
