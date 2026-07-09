@@ -18,8 +18,7 @@
 
     <!-- Exibe erro se o controller mandar -->
     <p th:if="${param.error}" style="color: red;">Usuário ou senha inválidos, ou cadastro inativo.</p>
-
-    <!-- O action bate direto no @PostMapping do nosso Controller -->
+    
     <form id="loginForm" th:action="@{/logar}" method="POST">
         <label>Usuário:</label> <br>
         <input type="text" name="username" > <br><br>

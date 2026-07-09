@@ -1,8 +1,9 @@
 package br.appLogin.appLogin.controller;
+import br.appLogin.appLogin.model.Usuario;
+import br.appLogin.appLogin.model.TipoUsuario;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import br.appLogin.appLogin.service.UsuarioService;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Controller
@@ -44,11 +44,16 @@ public class LoginController {
 //        return "index";
 //    }
 @GetMapping("/index")
-    public String telaSistema(@AuthenticationPrincipal UserDetails usuarioLogado, Model model){
+public String telaSistema(@AuthenticationPrincipal Usuario usuarioLogado, Model model) {
     model.addAttribute("usuarioLogado", usuarioLogado.getUsername());
-        return "index";
+    model.addAttribute("tipoUsuario", usuarioLogado.getTipoUsuario().name());
+    return "index";
+}
 
-    }
+@GetMapping("/admin")
+public String telaAdmin(){
+        return "admin";
+}
 
     @GetMapping("/logout")
     public String deslogar(HttpSession session){

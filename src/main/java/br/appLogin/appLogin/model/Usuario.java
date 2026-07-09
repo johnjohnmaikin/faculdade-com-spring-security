@@ -18,6 +18,10 @@ public class Usuario implements UserDetails { // 1. Adicione o 'implements UserD
     @Column(nullable = false, unique = true)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoUsuario tipoUsuario = TipoUsuario.USER;
+
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -48,7 +52,7 @@ public class Usuario implements UserDetails { // 1. Adicione o 'implements UserD
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Define o perfil padrão do usuário logado no sistema
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.tipoUsuario.name()));
     }
 
     @Override
@@ -87,6 +91,8 @@ public class Usuario implements UserDetails { // 1. Adicione o 'implements UserD
     // --- SEUS GETTERS E SETTERS ATUAIS (MANTIDOS IGUAIS) ---
     // Você pode manter ou remover o getUsername original, pois o método do UserDetails acima faz o mesmo papel
 
+    public TipoUsuario getTipoUsuario() {return tipoUsuario;}
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {this.tipoUsuario = tipoUsuario;}
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public boolean isAtivo() { return ativo; }

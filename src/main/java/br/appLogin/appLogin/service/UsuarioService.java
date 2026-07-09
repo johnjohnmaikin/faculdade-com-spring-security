@@ -33,23 +33,8 @@ public class UsuarioService implements UserDetailsService {
         return usuario;
     }
 
-    /*public boolean autenticar(String username, String senha){
-        Optional<Usuario> usuariosBuscados = usuarioRepository.findByUsername(username);
-
-        if(usuariosBuscados.isEmpty()){throw new IllegalArgumentException("Usuário ou senha invalidos!");}
-
-        Usuario usuario = usuariosBuscados.get();
-
-        if (!encoder.matches(senha, usuario.getSenha())) {throw new IllegalArgumentException("Usuário ou senha invalidos!");}
-
-        if (!usuario.isAtivo()) {throw new IllegalArgumentException("Usuário aguardando aprovação de cadastro.");}
-
-        return true;
-
-    }*/
-
-
     public boolean Cadastrar(String username, String senha, LocalDate data_nascimento, String cpf, String endereco){
+
         cpf = cpf.replaceAll("\\D", "");
         if(usuarioRepository.findByUsername(username).isPresent()){throw new IllegalArgumentException("Nome ja existe na base de dados!");}
         validaCpf(cpf);
@@ -71,5 +56,18 @@ public class UsuarioService implements UserDetailsService {
         return true;
     }
 }
+/*public boolean autenticar(String username, String senha){
+        Optional<Usuario> usuariosBuscados = usuarioRepository.findByUsername(username);
 
+        if(usuariosBuscados.isEmpty()){throw new IllegalArgumentException("Usuário ou senha invalidos!");}
+
+        Usuario usuario = usuariosBuscados.get();
+
+        if (!encoder.matches(senha, usuario.getSenha())) {throw new IllegalArgumentException("Usuário ou senha invalidos!");}
+
+        if (!usuario.isAtivo()) {throw new IllegalArgumentException("Usuário aguardando aprovação de cadastro.");}
+
+        return true;
+
+    }*/
 
