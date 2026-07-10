@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Administração</title>
 </head>
 <body>
     <p>setor de adminisração!</p>
+<table>
+    <tr>
+        <th>id</th>
+        <th>nome</th>
+        <th>Situação</th>
+    </tr>
+    <tr th:each="e : ${todos}">
+        <td th:text="${e.id}"></td>
+        <td th:text="${e.username}"></td>
+        <td th:text="${e.tipoUsuario}"></td>
+        <td><a th:href="@{/admin/editar/{id}(id=${e.id})}">editar</a></td>
+    </tr>
+</table>
 </body>
 </html>

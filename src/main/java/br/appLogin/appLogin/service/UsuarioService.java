@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,7 +56,27 @@ public class UsuarioService implements UserDetailsService {
 
         return true;
     }
+    public List<Usuario> buscarTodosUsuarios(){
+        return usuarioRepository.findAll();
+    }
+
+    public Usuario buscarUsuarioId(Long id){
+        Optional<Usuario> usuarioBuscado = usuarioRepository.findById(id);
+        if(usuarioBuscado.isPresent()){
+            Usuario usuarios = usuarioBuscado.get();
+            return usuarios;
+        }
+        throw new IllegalArgumentException("nenhum Usuário encontrado!");
+    }
+
+    public boolean ativarDesativar(Long id){
+        if(usuarioRepository.findById(id).isPresent()){
+            return true;
+        }
+            throw new IllegalArgumentException("nenhum Usuario encontrado");
+    }
 }
+
 /*public boolean autenticar(String username, String senha){
         Optional<Usuario> usuariosBuscados = usuarioRepository.findByUsername(username);
 

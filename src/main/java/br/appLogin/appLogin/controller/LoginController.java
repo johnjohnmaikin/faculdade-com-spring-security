@@ -3,10 +3,12 @@ import br.appLogin.appLogin.model.Usuario;
 import br.appLogin.appLogin.model.TipoUsuario;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import br.appLogin.appLogin.service.UsuarioService;
@@ -51,9 +53,21 @@ public String telaSistema(@AuthenticationPrincipal Usuario usuarioLogado, Model 
 }
 
 @GetMapping("/admin")
-public String telaAdmin(){
+public String telaAdmin(Model model){
+        model.addAttribute("todos", usuarioService.buscarTodosUsuarios());
         return "admin";
 }
+
+@GetMapping("/admin/editar/{id}")
+public String editarUsuarios(@PathVariable Long id, Model model){
+        try{
+            model.addAttribute("cheio", usuarioService.buscarUsuarioId(id));
+            return "editar";
+        }catch (IllegalArgumentException e){
+            model.addAttribute("vazio",e.getMessage());
+            return "editar";
+        }
+    }
 
     @GetMapping("/logout")
     public String deslogar(HttpSession session){
@@ -64,7 +78,7 @@ public String telaAdmin(){
     public String cadastrarUsuario(){
         return "cadastro";
     }
-    @PostMapping("/cadastrar")
+    @PostMapping({"/cadastrar", "/teste"})
     public String cadastrar(@RequestParam String nome,
                             @RequestParam String senha,
                             @RequestParam LocalDate data_nascimento,
@@ -72,6 +86,7 @@ public String telaAdmin(){
                             @RequestParam String endereco,
                             RedirectAttributes redirectAttributes){
         try{
+
             nome =nome.strip();
             usuarioService.Cadastrar(nome,senha,data_nascimento,cpf,endereco);
             redirectAttributes.addFlashAttribute("sucesso","usuário cadastrado com sucesso!");
@@ -80,7 +95,11 @@ public String telaAdmin(){
             redirectAttributes.addFlashAttribute("erro",e.getMessage());
             return "redirect:/cadastro";
         }
-
     }
+//    @PostMapping('ativar')
+//    public String ativarDesativar(Long id){
+//        if(usuarioService.ativarDesativar(id)){
+//            cadastrar()
+//    }
 }
 
