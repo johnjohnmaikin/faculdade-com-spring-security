@@ -34,14 +34,18 @@ public class UsuarioService implements UserDetailsService {
         return usuario;
     }
 
-    public boolean Cadastrar(String username, String senha, LocalDate data_nascimento, String cpf, String endereco){
+    public boolean Cadastrar(String username, String senha, LocalDate data_nascimento, String cpf, String endereco) {
 
         cpf = cpf.replaceAll("\\D", "");
-        if(usuarioRepository.findByUsername(username).isPresent()){throw new IllegalArgumentException("Nome ja existe na base de dados!");}
+        if (usuarioRepository.findByUsername(username).isPresent()) {
+            throw new IllegalArgumentException("Nome ja existe na base de dados!");
+        }
         validaCpf(cpf);
-        if(usuarioRepository.findByCpf(cpf).isPresent()){throw new IllegalArgumentException("cpf ja existe na base de dados!");}
+        if (usuarioRepository.findByCpf(cpf).isPresent()) {
+            throw new IllegalArgumentException("cpf ja existe na base de dados!");
+        }
 
-        Usuario usuario = new Usuario(username,encoder.encode(senha),data_nascimento,cpf,endereco);
+        Usuario usuario = new Usuario(username, encoder.encode(senha), data_nascimento, cpf, endereco);
         usuarioRepository.save(usuario);
 
         return true;
@@ -56,27 +60,29 @@ public class UsuarioService implements UserDetailsService {
 
         return true;
     }
-    public List<Usuario> buscarTodosUsuarios(){
+
+    public List<Usuario> buscarTodosUsuarios() {
         return usuarioRepository.findAll();
     }
 
-    public Usuario buscarUsuarioId(Long id){
+    public Usuario buscarUsuarioId(Long id) {
         Optional<Usuario> usuarioBuscado = usuarioRepository.findById(id);
-        if(usuarioBuscado.isPresent()){
+        if (usuarioBuscado.isPresent()) {
             Usuario usuarios = usuarioBuscado.get();
             return usuarios;
         }
         throw new IllegalArgumentException("nenhum Usuário encontrado!");
     }
 
-    public boolean ativarDesativar(Long id){
-        if(usuarioRepository.findById(id).isPresent()){
-            return true;
-        }
-            throw new IllegalArgumentException("nenhum Usuario encontrado");
+    public void ativarDesativar(String username, String situacao) {
+        Optional<Usuario> usuarioBuscado = usuarioRepository.findByUsername(username);
+        Usuario usuario = usuarioBuscado.get();
+        if(situacao.equals("ativo")){
+            usuario.setAtivo(true);
+        }else{usuario.setAtivo(false);}
+        usuarioRepository.save(usuario);
     }
 }
-
 /*public boolean autenticar(String username, String senha){
         Optional<Usuario> usuariosBuscados = usuarioRepository.findByUsername(username);
 

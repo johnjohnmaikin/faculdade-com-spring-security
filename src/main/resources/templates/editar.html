@@ -28,7 +28,7 @@
     <div class="div-pai-form">
         <form method="POST" class="form" th:action="@{/atualizar}" th:object="${cheio}">
             <div class="div-msg">
-                <p th:if="${vazio}" th:text="${vazio}" style="color:red;"></p>
+                <p th:text="${situacao}" style="color:green;"></p>
             </div>
             <fieldset class="fildset">
 
@@ -43,7 +43,10 @@
                     <div class="div-situacao div-inputs">
                         <label for="situacao" class="texts-form">Situação:</label>
                         <br>
-                        <input type="text" id="situacao" class="inputs_form" name="situacao" th:value="*{ativo} != null and *{ativo} == true ? 'ativo' : 'inativo'" />
+                        <select id="situacao" class="inputs_form" name="situacao">
+                            <option value="ativo" th:selected="*{ativo} == true">Ativo</option>
+                            <option value="inativo" th:selected="*{ativo} == false">Inativo</option>
+                        </select>
                     </div>
 
                     <div class="div-data-nascimento div-inputs">
@@ -64,6 +67,9 @@
                         <label for="endereco" class="texts-form">Endereço:</label >
                         <br>
                         <input type="text" id="endereco" placeholder="digite seu endereco" class="inputs_form" name="endereco" th:field="*{endereco}">
+                    </div>
+                    <div class="div-sobrenome div-inputs">
+                        <input type="hidden" id="id" name="id" th:value="${cheio.id}" /><input type="hidden" name="id" th:value="${cheio.id}" />
                     </div>
                 </div>
                 <button type="submit">Atualizar cadastro</button>

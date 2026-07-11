@@ -2,6 +2,7 @@ package br.appLogin.appLogin.controller;
 import br.appLogin.appLogin.model.Usuario;
 import br.appLogin.appLogin.model.TipoUsuario;
 import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,8 +21,9 @@ import java.time.LocalDate;
 public class LoginController {
     @Autowired
     private UsuarioService usuarioService;
+
     @GetMapping("/login")
-    public String paginaInicial(){
+    public String paginaInicial() {
         return "login";
     }
 
@@ -37,7 +39,7 @@ public class LoginController {
 //        return "redirect:/login";
 //    }
 
-//    @GetMapping("/index")
+    //    @GetMapping("/index")
 //    public String deslogarNull(HttpSession session, Model model){
 //        if(session.getAttribute("usuarioLogado")==null){
 //            return "redirect:/login";
@@ -45,61 +47,60 @@ public class LoginController {
 //        model.addAttribute("usuarioLogado", session.getAttribute("usuarioLogado"));
 //        return "index";
 //    }
-@GetMapping("/index")
-public String telaSistema(@AuthenticationPrincipal Usuario usuarioLogado, Model model) {
-    model.addAttribute("usuarioLogado", usuarioLogado.getUsername());
-    model.addAttribute("tipoUsuario", usuarioLogado.getTipoUsuario().name());
-    return "index";
-}
+    @GetMapping("/index")
+    public String telaSistema(@AuthenticationPrincipal Usuario usuarioLogado, Model model) {
+        model.addAttribute("usuarioLogado", usuarioLogado.getUsername());
+        model.addAttribute("tipoUsuario", usuarioLogado.getTipoUsuario().name());
+        return "index";
+    }
 
-@GetMapping("/admin")
-public String telaAdmin(Model model){
+    @GetMapping("/admin")
+    public String telaAdmin(@AuthenticationPrincipal Usuario usuario, Model model) {
+        model.addAttribute("usuarioLogado", usuario.getUsername());
         model.addAttribute("todos", usuarioService.buscarTodosUsuarios());
         return "admin";
-}
+    }
 
-@GetMapping("/admin/editar/{id}")
-public String editarUsuarios(@PathVariable Long id, Model model){
-        try{
+    @GetMapping("/admin/editar/{id}")
+    public String editarUsuarios(@PathVariable Long id, Model model) {
+        try {
             model.addAttribute("cheio", usuarioService.buscarUsuarioId(id));
             return "editar";
-        }catch (IllegalArgumentException e){
-            model.addAttribute("vazio",e.getMessage());
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("vazio", e.getMessage());
             return "editar";
         }
     }
-
-    @GetMapping("/logout")
-    public String deslogar(HttpSession session){
-        session.invalidate();
-        return "redirect:/login";
+    @PostMapping("/atualizar")
+    public String ativarDesativar(@RequestParam Long id, @RequestParam String username, @RequestParam String situacao, RedirectAttributes redirectAttributes){
+        usuarioService.ativarDesativar(username, situacao);
+        redirectAttributes.addFlashAttribute("situacao", "Situação do usuário atualizada com sucesso!");
+        return "redirect:/admin/editar/"+id;
     }
+
     @GetMapping("/cadastro")
-    public String cadastrarUsuario(){
+    public String cadastrarUsuario() {
         return "cadastro";
     }
+
     @PostMapping("/cadastrar")
     public String cadastrar(@RequestParam String nome,
                             @RequestParam String senha,
                             @RequestParam LocalDate data_nascimento,
                             @RequestParam String cpf,
                             @RequestParam String endereco,
-                            RedirectAttributes redirectAttributes){
-        try{
+                            RedirectAttributes redirectAttributes) {
+        try {
 
-            nome =nome.strip();
-            usuarioService.Cadastrar(nome,senha,data_nascimento,cpf,endereco);
-            redirectAttributes.addFlashAttribute("sucesso","usuário cadastrado com sucesso!");
+            nome = nome.strip();
+            usuarioService.Cadastrar(nome, senha, data_nascimento, cpf, endereco);
+            redirectAttributes.addFlashAttribute("sucesso", "usuário cadastrado com sucesso!");
             return "redirect:/cadastro";
-        }catch (IllegalArgumentException e){
-            redirectAttributes.addFlashAttribute("erro",e.getMessage());
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
             return "redirect:/cadastro";
         }
     }
-//    @PostMapping('ativar')
-//    public String ativarDesativar(Long id){
-//        if(usuarioService.ativarDesativar(id)){
-//            cadastrar()
-//    }
-}
 
+
+}
