@@ -78,7 +78,7 @@ public String editarUsuarios(@PathVariable Long id, Model model){
     public String cadastrarUsuario(){
         return "cadastro";
     }
-    @PostMapping({"/cadastrar", "/teste"})
+    @PostMapping("/cadastrar")
     public String cadastrar(@RequestParam String nome,
                             @RequestParam String senha,
                             @RequestParam LocalDate data_nascimento,
