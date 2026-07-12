@@ -23,14 +23,8 @@ public class UsuarioService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário ou senha invalidos!"));
+        Usuario usuario = usuarioRepository.findByUsername(username).get();
 
-        if (!usuario.isAtivo()) {
-            throw new DisabledException("Usuário aguardando aprovação de cadastro.");
-        }
-
-        // Retorna o próprio objeto usuario (sua classe Usuario deve implementar UserDetails)
         return usuario;
     }
 

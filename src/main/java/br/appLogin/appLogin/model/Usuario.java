@@ -95,8 +95,11 @@ public class Usuario implements UserDetails { // 1. Adicione o 'implements UserD
     public void setTipoUsuario(TipoUsuario tipoUsuario) {this.tipoUsuario = tipoUsuario;}
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public boolean isAtivo() { return ativo; }
-    public void setAtivo(boolean ativo) { this.ativo = ativo; }
+
+    public boolean isAtivo() {return ativo;}
+
+    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+
     public LocalDate getData_nascimento() { return data_nascimento; }
     public void setData_nascimento(LocalDate data_nascimento) { this.data_nascimento = data_nascimento; }
     public String getCpf() { return cpf; }
